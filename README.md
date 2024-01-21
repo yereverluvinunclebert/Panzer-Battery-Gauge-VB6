@@ -14,13 +14,15 @@
   
 The Panzer Battery Gauge VB6  is a useful utility displaying the Battery usage of your system in a dieselpunk fashion on your desktop. This Widget is a moveable widget that you can move anywhere around the desktop as you require.
  
-![panzer-ramphoto-1440x900](https://github.com/yereverluvinunclebert/Panzer-RAM-Gauge-VB6/assets/2788342/325c427a-2149-4f92-aeb9-51b9f937cd4c)
+![panzer-battery-ywidget-disp](https://github.com/yereverluvinunclebert/Panzer-Battery-Gauge-VB6/assets/2788342/46134280-8694-4931-a6b8-a7e091b1fb9d)
+
 
  This widget can be increased in size, animation speed can be changed, 
  opacity/transparency may be set as to the users discretion. The widget can 
  also be made to hide for a pre-determined period.
  
-![panzer-ram-icon](https://github.com/yereverluvinunclebert/Panzer-RAM-Gauge-VB6/assets/2788342/99ff7e97-d6e4-4696-93cc-e1342560465e)
+![battery-gauge-image](https://github.com/yereverluvinunclebert/Panzer-Battery-Gauge-VB6/assets/2788342/2f4a7cf6-fce5-46c6-9ee3-9be05609651f)
+
 
  Right clicking will bring up a menu of options. Double-clicking on the widget will cause a personalised Windows application to 
  fire up. The first time you run it there will be no assigned function and so it 
@@ -29,7 +31,8 @@ The Panzer Battery Gauge VB6  is a useful utility displaying the Battery usage o
  windows. Mouse hover over the widget and press CTRL+mousewheel up/down to resize. It works well on Windows XP 
  to Windows 11.
  
- ![panzer-ramgauge-help-750](https://github.com/yereverluvinunclebert/Panzer-Battery-Gauge-VB6/assets/2788342/4ac57fec-58ed-493d-ba1a-eaab078ef828)
+![panzer-batterygauge-help-65](https://github.com/yereverluvinunclebert/Panzer-Battery-Gauge-VB6/assets/2788342/53935c85-27d6-4e5a-bcee-006253ed25c8)
+
 
  The Panzer Battery Gauge VB6 gauge is Beta-grade software, under development, not yet 
  ready to use on a production system - use at your own risk.
@@ -55,7 +58,8 @@ The Panzer Battery Gauge VB6  is a useful utility displaying the Battery usage o
  enhancements and contributions will be gratefully received if you choose to 
  contribute.
 
-![security](https://github.com/yereverluvinunclebert/Panzer-RAM-Gauge-VB6/assets/2788342/2fdc4671-94e3-41ef-8885-997ae81978ce)
+![BATTERY-GAUGE-001](https://github.com/yereverluvinunclebert/Panzer-Battery-Gauge-VB6/assets/2788342/351d7888-fe50-42f7-a687-37d7cb6ba0a4)
+
 
  BUILD: The program runs without any Microsoft plugins.
  
@@ -170,8 +174,9 @@ The Panzer Battery Gauge VB6  is a useful utility displaying the Battery usage o
  REGTLIB %SystemRoot%\System32\OLEGUIDS.TLB
  
  In the VB6 IDE - project - references - browse - select the OLEGuids.tlb
- 
-![prefs-about](https://github.com/yereverluvinunclebert/Panzer-RAM-Gauge-VB6/assets/2788342/b2063169-44ad-4fd1-960f-53bed0c030e6)
+
+![prefs-about](https://github.com/yereverluvinunclebert/Panzer-Battery-Gauge-VB6/assets/2788342/302e59dd-c767-4b38-b748-b3119f3a6d15)
+
 
 
  * SETUP.EXE - The program is currently distributed using setup2go, a very useful 
@@ -206,7 +211,7 @@ The Panzer Battery Gauge VB6  is a useful utility displaying the Battery usage o
  With regard to the commercial use of incorporated images, permission and a 
  licence would need to be obtained from the original owner and creator, ie. me.
  
-![about](https://github.com/yereverluvinunclebert/Panzer-RAM-Gauge-VB6/assets/2788342/00641064-f0ae-435c-ac64-24e6a30290bc)
+![about](https://github.com/yereverluvinunclebert/Panzer-Battery-Gauge-VB6/assets/2788342/d0bcdc88-8c68-49a1-8f00-d1371ad6bca6)
 
 ![Panzer-CPU-Gauge-onDesktop](https://github.com/yereverluvinunclebert/Panzer-RAM-Gauge-VB6/assets/2788342/6dc97b14-9954-4f8c-a775-5657b2aeec85)
 
