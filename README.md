@@ -12,7 +12,28 @@
  communities. The Panzer Battery Gauge widget is an attractive dieselpunk VB6 widget for your desktop. 
  Functional and gorgeous at the same time. The graphics are my own, I took original inspiration from a clock face by Italo Fortana combining it with an aircraft gauge surround. It is all my code with some help from the chaps at VBForums (credits given). 
   
-The Panzer Battery Gauge VB6  is a useful utility displaying the Battery usage of your system in a dieselpunk fashion on your desktop. This Widget is a moveable widget that you can move anywhere around the desktop as you require.
+The Panzer Battery Gauge VB6  is a useful utility displaying the Battery usage of your system in a dieselpunk fashion on your desktop. This Widget is a moveable widget that you can move anywhere around the desktop as you require. The battery data is extracted via an API and also from the WMI data repository. The gauge extracts the temperature data from that repository and displays it via a pointer on the gauge on the desktop.
+
+These are the pertinent bits:
+
+API first
+	Private Declare Function GetSystemPowerStatus Lib "kernel32" (lpSystemPowerStatus As SYSTEM_POWER_STATUS) As Long
+
+	Private Type SYSTEM_POWER_STATUS
+        	ACLineStatus As Byte
+        	BatteryFlag As Byte
+        	BatteryLifePercent As Byte
+        	Reserved1 As Byte
+        	BatteryLifeTime As Long
+        	BatteryFullLifeTime As Long
+	End Type
+
+    Battery_Usage_Percent = BatteryStatus.BatteryLifePercent
+
+WMI
+    Set objSWbemLocator = CreateObject("WbemScripting.SWbemLocator")
+    Set objSWbemServices = objSWbemLocator.ConnectServer(strComputer, "root\cimv2")
+    Set colItems = objSWbemServices.ExecQuery("SELECT * FROM Win32_Battery")
  
 ![panzer-battery-ywidget-disp](https://github.com/yereverluvinunclebert/Panzer-Battery-Gauge-VB6/assets/2788342/46134280-8694-4931-a6b8-a7e091b1fb9d)
 
