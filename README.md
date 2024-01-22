@@ -197,8 +197,9 @@ The Panzer Battery Gauge VB6  is a useful utility displaying the Battery usage o
 	VisualBasic Runtime Objects and Procedures  
 	VisualBasic Objects and Procedures  
 	OLE Automation  
-	vbRichClient6  
- 
+ 	Microsoft WMI Scripting V1.2 Library wbemdisp.tlb 
+	vbRichClient6  - RC6Widgets (RC6Widgets.DLL)
+                       - RC6 (RC6.DLL)
  
  LICENCE AGREEMENTS:
  
