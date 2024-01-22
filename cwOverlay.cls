@@ -667,39 +667,11 @@ Private Sub getgblBatteryArray() 'ByRef thisArray() As String, ByRef gblBatteryC
     
     'ReDim thisArray(thisBatteryCount, 4) As String
     For Each objItem In colItems
-        result = "Availability: " & objItem.Availability
-        result = "BatteryRechargeTime: " & objItem.BatteryRechargeTime
-        result = "BatteryStatus: " & objItem.BatteryStatus
-        result = "Caption: " & objItem.Caption
-        result = "Chemistry: " & objItem.Chemistry
-        result = "ConfigManagerErrorCode: " & objItem.ConfigManagerErrorCode
-        result = "ConfigManagerUserConfig: " & objItem.ConfigManagerUserConfig
-        result = "CreationClassName: " & objItem.CreationClassName
-        result = "Description: " & objItem.Description
-        result = "DesignCapacity: " & objItem.DesignCapacity
-        result = "DesignVoltage: " & objItem.DesignVoltage
-        result = "DeviceID: " & objItem.DeviceID
-        result = "ErrorCleared: " & objItem.ErrorCleared
-        result = "ErrorDescription: " & objItem.ErrorDescription
-        result = "EstimatedChargeRemaining: " & objItem.EstimatedChargeRemaining
-        result = "EstimatedRunTime: " & objItem.EstimatedRunTime
-        result = "ExpectedBatteryLife: " & objItem.ExpectedBatteryLife
-        result = "ExpectedLife: " & objItem.ExpectedLife
-        result = "FullChargeCapacity: " & objItem.FullChargeCapacity
-        result = "InstallDate: " & objItem.InstallDate
-        result = "LastErrorCode: " & objItem.LastErrorCode
-        result = "MaxRechargeTime: " & objItem.MaxRechargeTime
-        result = "Name: " & objItem.Name
-        result = "PNPDeviceID: " & objItem.PNPDeviceID
-        result = "PowerManagementCapabilities: " & objItem.PowerManagementCapabilities
-        result = "PowerManagementSupported: " & objItem.PowerManagementSupported
-        result = "SmartBatteryVersion: " & objItem.SmartBatteryVersion
-        result = "Status: " & objItem.Status
-        result = "StatusInfo: " & objItem.StatusInfo
-        result = "SystemCreationClassName: " & objItem.SystemCreationClassName
-        result = "SystemName: " & objItem.SystemName
-        result = "TimeOnBattery: " & objItem.TimeOnBattery
-        result = "TimeToFullCharge: " & objItem.TimeToFullCharge
+        result = "Battery: " & objItem.Name & vbCrLf
+        'result = result + "Availability: " & objItem.Availability & vbLf
+        result = result + "Voltage: " & objItem.DesignVoltage & " Millivolts " & vbCrLf 'millivolts
+        result = result + "Estimated Run Time Remaining: " & objItem.EstimatedRunTime & " mins. " & vbCrLf
+
         I = I + 1
     Next
           
