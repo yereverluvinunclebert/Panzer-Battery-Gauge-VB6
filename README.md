@@ -37,6 +37,13 @@ WMI
     Set objSWbemServices = objSWbemLocator.ConnectServer(strComputer, "root\cimv2")
     Set colItems = objSWbemServices.ExecQuery("SELECT * FROM Win32_Battery")
 
+    For Each objItem In colItems
+        result = "Battery: " & objItem.Name & vbCrLf
+        result = result + "Voltage: " & objItem.DesignVoltage & " Millivolts " & vbCrLf 'millivolts
+        result = result + "Estimated Run Time Remaining: " & objItem.EstimatedRunTime & " mins. " & vbCrLf
+    Next
+
+
 ![panzer-battery-ywidget-disp](https://github.com/yereverluvinunclebert/Panzer-Battery-Gauge-VB6/assets/2788342/46134280-8694-4931-a6b8-a7e091b1fb9d)
 
 This widget can be increased in size, animation speed can be changed,
