@@ -43,6 +43,7 @@ WMI
         result = result + "Estimated Run Time Remaining: " & objItem.EstimatedRunTime & " mins. " & vbCrLf
     Next
 
+Hope the above is useful to anyone else building system metric utilities using VB6/VBS/VBA.
 
 ![panzer-battery-ywidget-disp](https://github.com/yereverluvinunclebert/Panzer-Battery-Gauge-VB6/assets/2788342/46134280-8694-4931-a6b8-a7e091b1fb9d)
 
