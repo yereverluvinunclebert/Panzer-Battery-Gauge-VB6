@@ -582,11 +582,11 @@ Private Function Battery_Usage_Percent() As Integer
     
     Call GetSystemPowerStatus(BatteryStatus)
     
-    If BatteryStatus.ACLineStatus <> 1 Then
+    'If BatteryStatus.ACLineStatus <> 1 Then
         Battery_Usage_Percent = BatteryStatus.BatteryLifePercent ' & "% - " & Left(BatteryTime, 1) & "h" & Format(Right(BatteryTime, 3) * 60, "00") & "m"
-    Else
-        Battery_Usage_Percent = 0
-    End If
+    'Else
+        'Battery_Usage_Percent = 0
+    'End If
     
     On Error GoTo 0
     Exit Function
@@ -608,16 +608,18 @@ End Function
 ' ----------------------------------------------------------------
 Private Function Battery_Total_Left() As String
     Dim BatteryStatus As SYSTEM_POWER_STATUS
-    Dim BatteryTime As String
+    Dim batteryDischargeTime As Double
     
     On Error GoTo Battery_Total_Left_Error
     
     Call GetSystemPowerStatus(BatteryStatus)
     
-    If BatteryStatus.ACLineStatus <> 1 Then
-        Battery_Total_Left = Left(BatteryTime, 1) & "h" & Format(Right(BatteryTime, 3) * 60, "00") & "m"
+    batteryDischargeTime = BatteryStatus.BatteryLifeTime ' no of seconds
+
+    If batteryDischargeTime <> -1 Then
+        Battery_Total_Left = "Time until discharge -" & Str$(Round(batteryDischargeTime / 60, 2)) & " mins"
     Else
-        Battery_Total_Left = 0
+        Battery_Total_Left = "Time until discharge - unknown."
     End If
       
     On Error GoTo 0
