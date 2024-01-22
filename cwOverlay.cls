@@ -556,6 +556,7 @@ Private Sub obtainBattery()
         batteryPercent = Battery_Usage_Percent
         batteryTotalTimeLeft = Battery_Total_Left
         SDeg = (batteryPercent * 3) + 30
+        Call getgblBatteryArray
     
     On Error GoTo 0
     Exit Sub
@@ -583,10 +584,11 @@ Private Function Battery_Usage_Percent() As Integer
     Call GetSystemPowerStatus(BatteryStatus)
     
     'If BatteryStatus.ACLineStatus <> 1 Then
+    If BatteryStatus.BatteryLifePercent <> 255 Then ' 255 = no battery, desktop system
         Battery_Usage_Percent = BatteryStatus.BatteryLifePercent ' & "% - " & Left(BatteryTime, 1) & "h" & Format(Right(BatteryTime, 3) * 60, "00") & "m"
-    'Else
-        'Battery_Usage_Percent = 0
-    'End If
+    Else
+        Battery_Usage_Percent = 0
+    End If
     
     On Error GoTo 0
     Exit Function
@@ -616,7 +618,7 @@ Private Function Battery_Total_Left() As String
     
     batteryDischargeTime = BatteryStatus.BatteryLifeTime ' no of seconds
 
-    If batteryDischargeTime <> -1 Then
+    If batteryDischargeTime <> -1 Then ' always -1 when powered by mains PSU
         Battery_Total_Left = "Time until discharge -" & Str$(Round(batteryDischargeTime / 60, 2)) & " mins"
     Else
         Battery_Total_Left = "Time until discharge - unknown."
@@ -632,3 +634,82 @@ Battery_Total_Left_Error:
 End Function
 
 '
+
+' ----------------------------------------------------------------
+' Procedure Name: getGblBatteryArray
+' Purpose: Obtains the names of all the Batterys from the system
+' Procedure Kind: sub
+' Procedure Access: public
+' Author: beededea
+' Date: 13/01/2024
+' ----------------------------------------------------------------
+Private Sub getgblBatteryArray() 'ByRef thisArray() As String, ByRef gblBatteryCount As Integer)
+    
+    Dim strComputer As String
+    Dim objSWbemLocator As Object
+    Dim objSWbemServices As Object
+    Dim colItems As Object
+    Dim objItem As Object
+    Dim thisBatteryCount As Integer: thisBatteryCount = 0
+    Dim I As Integer
+    Dim result As String
+    Dim gblBatteryCount As Integer
+    
+    On Error GoTo getGblBatteryArray_Error
+    
+    strComputer = "."  ' localhost
+    
+    Set objSWbemLocator = CreateObject("WbemScripting.SWbemLocator")
+    Set objSWbemServices = objSWbemLocator.ConnectServer(strComputer, "root\cimv2")
+    Set colItems = objSWbemServices.ExecQuery("SELECT * FROM Win32_Battery")
+
+    thisBatteryCount = colItems.Count
+    
+    'ReDim thisArray(thisBatteryCount, 4) As String
+    For Each objItem In colItems
+        result = "Availability: " & objItem.Availability
+        result = "BatteryRechargeTime: " & objItem.BatteryRechargeTime
+        result = "BatteryStatus: " & objItem.BatteryStatus
+        result = "Caption: " & objItem.Caption
+        result = "Chemistry: " & objItem.Chemistry
+        result = "ConfigManagerErrorCode: " & objItem.ConfigManagerErrorCode
+        result = "ConfigManagerUserConfig: " & objItem.ConfigManagerUserConfig
+        result = "CreationClassName: " & objItem.CreationClassName
+        result = "Description: " & objItem.Description
+        result = "DesignCapacity: " & objItem.DesignCapacity
+        result = "DesignVoltage: " & objItem.DesignVoltage
+        result = "DeviceID: " & objItem.DeviceID
+        result = "ErrorCleared: " & objItem.ErrorCleared
+        result = "ErrorDescription: " & objItem.ErrorDescription
+        result = "EstimatedChargeRemaining: " & objItem.EstimatedChargeRemaining
+        result = "EstimatedRunTime: " & objItem.EstimatedRunTime
+        result = "ExpectedBatteryLife: " & objItem.ExpectedBatteryLife
+        result = "ExpectedLife: " & objItem.ExpectedLife
+        result = "FullChargeCapacity: " & objItem.FullChargeCapacity
+        result = "InstallDate: " & objItem.InstallDate
+        result = "LastErrorCode: " & objItem.LastErrorCode
+        result = "MaxRechargeTime: " & objItem.MaxRechargeTime
+        result = "Name: " & objItem.Name
+        result = "PNPDeviceID: " & objItem.PNPDeviceID
+        result = "PowerManagementCapabilities: " & objItem.PowerManagementCapabilities
+        result = "PowerManagementSupported: " & objItem.PowerManagementSupported
+        result = "SmartBatteryVersion: " & objItem.SmartBatteryVersion
+        result = "Status: " & objItem.Status
+        result = "StatusInfo: " & objItem.StatusInfo
+        result = "SystemCreationClassName: " & objItem.SystemCreationClassName
+        result = "SystemName: " & objItem.SystemName
+        result = "TimeOnBattery: " & objItem.TimeOnBattery
+        result = "TimeToFullCharge: " & objItem.TimeToFullCharge
+        I = I + 1
+    Next
+          
+    gblBatteryCount = thisBatteryCount
+        
+    On Error GoTo 0
+    Exit Sub
+
+getGblBatteryArray_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure getGblBatteryArray, line " & Erl & "."
+
+End Sub
