@@ -1013,6 +1013,9 @@ Private Sub loadExcludePathCollection()
         .Add Empty, "battminlamptrue"
         .Add Empty, "battminlampfalse"
 
+        .Add Empty, "charginglamptrue"
+        .Add Empty, "charginglampfalse"
+
         .Add Empty, "discharginglamptrue"
         .Add Empty, "discharginglampfalse"
 

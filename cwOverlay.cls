@@ -571,7 +571,14 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                         CC.Paint Arr(2), Pat ' render the Pattern
                     End If
                      
-                 Case "discharginglamptrue"
+                 Case "charginglamptrue"
+                    
+                    If mOnACPower = True Then
+                        Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1)) 'shift the Pattern via the original X,Y PSD-Offsets (stored in Arr(0) and Arr(1))
+                        CC.Paint Arr(2), Pat 'render the Pattern
+                    End If
+                    
+                 Case "charginglampfalse"
                     
                     If mOnACPower = False Then
                         Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1)) 'shift the Pattern via the original X,Y PSD-Offsets (stored in Arr(0) and Arr(1))
@@ -579,6 +586,13 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                     End If
                     
                      
+                 Case "discharginglamptrue"
+                    
+                    If mOnACPower = False Then
+                        Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1)) 'shift the Pattern via the original X,Y PSD-Offsets (stored in Arr(0) and Arr(1))
+                        CC.Paint Arr(2), Pat 'render the Pattern
+                    End If
+                    
                  Case "discharginglampfalse"
                     
                     If mOnACPower = True Then
@@ -586,7 +600,6 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                         CC.Paint Arr(2), Pat 'render the Pattern
                     End If
                     
-                   
                  Case Else 'plain output for everything else ... this includes the reflection-layers,
                      
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1))
