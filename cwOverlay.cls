@@ -489,7 +489,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     someOpacity = (Val(mThisOpacity) / 100) * 0.75
     
     txtBatteryPercent = CStr(Int(batteryPercent))
-    txtBatterytotal = batteryTotalTimeLeft
+    txtBatterytotal = CStr(batteryTotalTimeLeft)
 
     For I = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
       Arr = cCollOverlayImages.ItemByIndex(I)
