@@ -45,13 +45,15 @@ Attribute tmrClock.VB_VarHelpID = -1
 
 Private SDeg As Double
 Private batteryPercent As Long
-Private batteryTotalTimeLeft As String
+Private batteryTotalTimeLeft As Single
+'Private batteryDetails As String
 
 '------------------------------------------------------ ENDS
 
 Private mTicking As Boolean ' property Ticking
 Private mSmoothSecondHand As Boolean ' property SmoothSecondHand
 Private mLocked As Boolean ' property Locked
+Private mBatteryDetails As String ' property
 Private mHidden As Boolean ' property Hidden
 Private mThisOpacity As String ' property ThisOpacity
 Private mSamplingInterval As String ' property SamplingInterval
@@ -345,6 +347,46 @@ LockedLet_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwOverlay"
 End Property
 
+
+'---------------------------------------------------------------------------------------
+' Property : batteryDetails
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Get batteryDetails() As String
+   On Error GoTo batteryDetailsGet_Error
+
+   batteryDetails = mBatteryDetails
+
+   On Error GoTo 0
+   Exit Property
+
+batteryDetailsGet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property batteryDetails of Class Module cwOverlay"
+End Property
+'---------------------------------------------------------------------------------------
+' Property  : batteryDetails
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Let batteryDetails(ByVal newValue As String)
+   On Error GoTo batteryDetailsLet_Error
+
+   If mBatteryDetails <> newValue Then mBatteryDetails = newValue Else Exit Property
+
+   On Error GoTo 0
+   Exit Property
+
+batteryDetailsLet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property batteryDetails of Class Module cwOverlay"
+End Property
+
 '---------------------------------------------------------------------------------------
 ' Property  : Hidden
 ' Author    : beededea
@@ -550,13 +592,17 @@ End Sub
 ' Date: 13/01/2024
 ' ----------------------------------------------------------------
 Private Sub obtainBattery()
+    Dim thisACLineStatus As String: thisACLineStatus = vbNullString
 
     On Error GoTo obtainBattery_Error
     
-        batteryPercent = Battery_Usage_Percent
-        batteryTotalTimeLeft = Battery_Total_Left
+        mBatteryDetails = fBatteryString
+        batteryPercent = fBattery_Usage_Percent(thisACLineStatus)
+        
+        mBatteryDetails = mBatteryDetails & vbCrLf & thisACLineStatus
+        batteryTotalTimeLeft = fBattery_Total_Left
         SDeg = (batteryPercent * 3) + 30
-        Call getgblBatteryArray
+
     
     On Error GoTo 0
     Exit Sub
@@ -568,7 +614,7 @@ obtainBattery_Error:
 End Sub
 
 ' ----------------------------------------------------------------
-' Procedure Name: Battery_Usage_Percent
+' Procedure Name: fBattery_Usage_Percent
 ' Purpose:
 ' Procedure Kind: Function
 ' Procedure Access: Private
@@ -576,31 +622,33 @@ End Sub
 ' Author: https://www.tek-tips.com/userinfo.cfm?member=Hypetia
 ' Date: 09/01/2024
 ' ----------------------------------------------------------------
-Private Function Battery_Usage_Percent() As Integer
+Private Function fBattery_Usage_Percent(ByRef thisACLineStatus As String) As Integer
     Dim BatteryStatus As SYSTEM_POWER_STATUS
     
-    On Error GoTo Battery_Usage_Percent_Error
+    On Error GoTo fBattery_Usage_Percent_Error
+    
+    thisACLineStatus = "Mains AC Input Switched OFF."
     
     Call GetSystemPowerStatus(BatteryStatus)
     
-    'If BatteryStatus.ACLineStatus <> 1 Then
+    If BatteryStatus.ACLineStatus = 1 Then thisACLineStatus = "Mains AC Input Switched ON."
     If BatteryStatus.BatteryLifePercent <> 255 Then ' 255 = no battery, desktop system
-        Battery_Usage_Percent = BatteryStatus.BatteryLifePercent ' & "% - " & Left(BatteryTime, 1) & "h" & Format(Right(BatteryTime, 3) * 60, "00") & "m"
+        fBattery_Usage_Percent = BatteryStatus.BatteryLifePercent ' & "% - " & Left(BatteryTime, 1) & "h" & Format(Right(BatteryTime, 3) * 60, "00") & "m"
     Else
-        Battery_Usage_Percent = 0
+        fBattery_Usage_Percent = 0
     End If
     
     On Error GoTo 0
     Exit Function
 
-Battery_Usage_Percent_Error:
+fBattery_Usage_Percent_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Battery_Usage_Percent, line " & Erl & "."
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fBattery_Usage_Percent, line " & Erl & "."
 
 End Function
 
 ' ----------------------------------------------------------------
-' Procedure Name: Battery_Total_Left
+' Procedure Name: fBattery_Total_Left
 ' Purpose:
 ' Procedure Kind: Function
 ' Procedure Access: Private
@@ -608,80 +656,73 @@ End Function
 ' Author: https://www.tek-tips.com/userinfo.cfm?member=Hypetia
 ' Date: 09/01/2024
 ' ----------------------------------------------------------------
-Private Function Battery_Total_Left() As String
+Private Function fBattery_Total_Left() As Single
     Dim BatteryStatus As SYSTEM_POWER_STATUS
     Dim batteryDischargeTime As Double
     
-    On Error GoTo Battery_Total_Left_Error
+    On Error GoTo fBattery_Total_Left_Error
     
     Call GetSystemPowerStatus(BatteryStatus)
     
     batteryDischargeTime = BatteryStatus.BatteryLifeTime ' no of seconds
 
     If batteryDischargeTime <> -1 Then ' always -1 when powered by mains PSU
-        Battery_Total_Left = "Time until discharge -" & Str$(Round(batteryDischargeTime / 60, 2)) & " mins"
+        fBattery_Total_Left = Round(batteryDischargeTime / 60, 2)
     Else
-        Battery_Total_Left = "Time until discharge - unknown."
+        fBattery_Total_Left = 0
     End If
       
     On Error GoTo 0
     Exit Function
 
-Battery_Total_Left_Error:
+fBattery_Total_Left_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Battery_Total_Left, line " & Erl & "."
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fBattery_Total_Left, line " & Erl & "."
 
 End Function
 
 '
 
 ' ----------------------------------------------------------------
-' Procedure Name: getGblBatteryArray
+' Procedure Name: batteryString
 ' Purpose: Obtains the names of all the Batterys from the system
-' Procedure Kind: sub
+' Procedure Kind: func
 ' Procedure Access: public
 ' Author: beededea
 ' Date: 13/01/2024
 ' ----------------------------------------------------------------
-Private Sub getgblBatteryArray() 'ByRef thisArray() As String, ByRef gblBatteryCount As Integer)
+Private Function fBatteryString() As String
     
-    Dim strComputer As String
+    Dim strComputer As String: strComputer = vbNullString
     Dim objSWbemLocator As Object
     Dim objSWbemServices As Object
     Dim colItems As Object
     Dim objItem As Object
-    Dim thisBatteryCount As Integer: thisBatteryCount = 0
-    Dim I As Integer
-    Dim result As String
-    Dim gblBatteryCount As Integer
+    Dim result As String: result = vbNullString
     
     On Error GoTo getGblBatteryArray_Error
     
     strComputer = "."  ' localhost
+    result = "No battery installed."
     
     Set objSWbemLocator = CreateObject("WbemScripting.SWbemLocator")
     Set objSWbemServices = objSWbemLocator.ConnectServer(strComputer, "root\cimv2")
     Set colItems = objSWbemServices.ExecQuery("SELECT * FROM Win32_Battery")
-
-    thisBatteryCount = colItems.Count
     
-    'ReDim thisArray(thisBatteryCount, 4) As String
     For Each objItem In colItems
         result = "Battery: " & objItem.Name & vbCrLf
         'result = result + "Availability: " & objItem.Availability & vbLf
         result = result + "Voltage: " & objItem.DesignVoltage & " Millivolts " & vbCrLf 'millivolts
         result = result + "Estimated Run Time Remaining: " & objItem.EstimatedRunTime & " mins. " & vbCrLf
-
-        I = I + 1
     Next
-          
-    gblBatteryCount = thisBatteryCount
         
+    fBatteryString = result ' return
+    
     On Error GoTo 0
-    Exit Sub
+    Exit Function
 
 getGblBatteryArray_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure getGblBatteryArray, line " & Erl & "."
 
-End Sub
+End Function
