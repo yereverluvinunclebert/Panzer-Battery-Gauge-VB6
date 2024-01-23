@@ -66,7 +66,7 @@ Public Sub initAndShowAboutForm(ByVal x As Long, ByVal Y As Long, Optional ByVal
     On Error GoTo initAndShowAboutForm_Error
     
     If PzGDpiAwareness = "0" Then
-        aboutFormWidth = 1000
+        aboutFormWidth = 900
         aboutFormHeight = 850
         If aboutFormWidth > screenWidthPixels Then aboutFormWidth = screenWidthPixels
         If aboutFormHeight > screenHeightPixels Then aboutFormHeight = screenHeightPixels
@@ -134,7 +134,7 @@ Public Sub initAndShowHelpForm(ByVal x As Long, ByVal Y As Long, Optional ByVal 
     On Error GoTo initAndShowHelpForm_Error
     
     If PzGDpiAwareness = "0" Then
-        helpFormWidth = 900
+        helpFormWidth = 1000
         helpFormHeight = 800
         If helpFormWidth > screenWidthPixels Then helpFormWidth = screenWidthPixels
         If helpFormHeight > screenHeightPixels Then helpFormHeight = screenHeightPixels
