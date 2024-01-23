@@ -54,6 +54,7 @@ Private mTicking As Boolean ' property Ticking
 Private mSmoothSecondHand As Boolean ' property SmoothSecondHand
 Private mLocked As Boolean ' property Locked
 Private mBatteryDetails As String ' property
+Private mOnACPower As Boolean ' property
 Private mHidden As Boolean ' property Hidden
 Private mThisOpacity As String ' property ThisOpacity
 Private mSamplingInterval As String ' property SamplingInterval
@@ -306,7 +307,7 @@ Public Property Let SmoothSecondHand(ByVal newValue As Boolean)
 SmoothSecondHandLet_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property SmoothSecondHand of Class Module cwOverlay"
-End Property ' the earth SmoothSecondHand flag
+End Property
 
 '---------------------------------------------------------------------------------------
 ' Property : Locked
@@ -385,6 +386,46 @@ Public Property Let batteryDetails(ByVal newValue As String)
 batteryDetailsLet_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property batteryDetails of Class Module cwOverlay"
+End Property
+
+
+'---------------------------------------------------------------------------------------
+' Property : OnACpower
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Get OnACpower() As String
+   On Error GoTo OnACpowerGet_Error
+
+   OnACpower = mOnACPower
+
+   On Error GoTo 0
+   Exit Property
+
+OnACpowerGet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property OnACpower of Class Module cwOverlay"
+End Property
+'---------------------------------------------------------------------------------------
+' Property  : OnACpower
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Let OnACpower(ByVal newValue As String)
+   On Error GoTo OnACpowerLet_Error
+
+   If mOnACPower <> newValue Then mOnACPower = newValue Else Exit Property
+
+   On Error GoTo 0
+   Exit Property
+
+OnACpowerLet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property OnACpower of Class Module cwOverlay"
 End Property
 
 '---------------------------------------------------------------------------------------
@@ -516,20 +557,36 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                     CC.RotateDrawingsDeg SDeg
                     CC.Paint Arr(2), Pat 'render the Pattern with the current PSD-LayerAlpha, present in Arr(2)
                     
-                 Case "redlamptrue"
+                 Case "battminlamptrue"
                     
-                    If batteryPercent >= 80 Then
+                    If batteryPercent <= 20 And mOnACPower = False Then
                         Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1)) 'shift the Pattern via the original X,Y PSD-Offsets (stored in Arr(0) and Arr(1))
                         CC.Paint Arr(2), Pat 'render the Pattern
                     End If
                     
-                 Case "redlampfalse"
+                 Case "battminlampfalse"
                     
-                    If batteryPercent < 80 Then
+                    If batteryPercent > 20 Or mOnACPower = True Then
                         Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1))
                         CC.Paint Arr(2), Pat ' render the Pattern
                     End If
+                     
+                 Case "discharginglamptrue"
                     
+                    If mOnACPower = False Then
+                        Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1)) 'shift the Pattern via the original X,Y PSD-Offsets (stored in Arr(0) and Arr(1))
+                        CC.Paint Arr(2), Pat 'render the Pattern
+                    End If
+                    
+                     
+                 Case "discharginglampfalse"
+                    
+                    If mOnACPower = True Then
+                        Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1)) 'shift the Pattern via the original X,Y PSD-Offsets (stored in Arr(0) and Arr(1))
+                        CC.Paint Arr(2), Pat 'render the Pattern
+                    End If
+                    
+                   
                  Case Else 'plain output for everything else ... this includes the reflection-layers,
                      
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1))
@@ -631,7 +688,11 @@ Private Function fBattery_Usage_Percent(ByRef thisACLineStatus As String) As Int
     
     Call GetSystemPowerStatus(BatteryStatus)
     
-    If BatteryStatus.ACLineStatus = 1 Then thisACLineStatus = "Mains AC Input Switched ON."
+    If BatteryStatus.ACLineStatus = 1 Then
+        mOnACPower = True
+        thisACLineStatus = "Mains AC Input Switched ON."
+    End If
+    
     If BatteryStatus.BatteryLifePercent <> 255 Then ' 255 = no battery, desktop system
         fBattery_Usage_Percent = BatteryStatus.BatteryLifePercent ' & "% - " & Left(BatteryTime, 1) & "h" & Format(Right(BatteryTime, 3) * 60, "00") & "m"
     Else
@@ -713,7 +774,10 @@ Private Function fBatteryString() As String
         result = "Battery: " & objItem.Name & vbCrLf
         'result = result + "Availability: " & objItem.Availability & vbLf
         result = result + "Voltage: " & objItem.DesignVoltage & " Millivolts " & vbCrLf 'millivolts
-        result = result + "Estimated Run Time Remaining: " & objItem.EstimatedRunTime & " mins. " & vbCrLf
+        If objItem.BatteryStatus <> 2 Then
+            mOnACPower = False
+            result = result + "Estimated Run Time Remaining: " & objItem.EstimatedRunTime & " mins. " & vbCrLf
+        End If
     Next
         
     fBatteryString = result ' return
