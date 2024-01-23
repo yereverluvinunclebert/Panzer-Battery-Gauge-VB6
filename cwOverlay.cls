@@ -523,14 +523,14 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     'set some Font- and ForeColor-Properties and draw some Text on the Widget
     W.FontName = "arial"
     W.ForeColor = cream
-    W.FontSize = 18
+    W.FontSize = 17
     W.FontBold = True
     W.SelectFontSettingsInto CC
     W.Refresh
     someOpacity = (Val(mThisOpacity) / 100) * 0.75
     
     txtBatteryPercent = CStr(Int(batteryPercent))
-    txtBatterytotal = CStr(batteryTotalTimeLeft)
+    txtBatterytotal = CStr(Int(batteryTotalTimeLeft))
 
     For I = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
       Arr = cCollOverlayImages.ItemByIndex(I)

@@ -1,36 +1,14 @@
 DONE
 
-' conversion graphics PSD
-' project VBP renamed all contents
-' rename all files
-' tooltips, text all converted justclock, just clock, globe
-' unwanted time controls, code and variables removed from prefs
-' test cpu percent extraction using registry - failure
-' cpu percent extraction using API
-' gauge digital displays
-' pointer rotation
-' lamps added and lit at high CPU
-' icons created and assigned to forms
-' sizing control corrected
-' help image
-' about image
-' menu text changed
-' new sampling control
-' colouring new control
-' html help and images updated
-' chm help built
-' test autostart
-' initial github synch.
-' readme.md created and updated with new images
-
-' -oOo-
+lamps
+pointer
+help
+help CHM
 
 TODO
 
 ' smooth pointer - flick/smooth
-' sampling interval vars - done
-' sampling interval var validation - done
-' sampling interval var reading/writing - done
+
 
 ' add second monitor - wip find cable!
 
