@@ -666,13 +666,14 @@ Private Sub obtainBattery()
 
     On Error GoTo obtainBattery_Error
     
+        batteryTotalTimeLeft = fBattery_Total_Left
+
         mBatteryDetails = fBatteryString
         batteryPercent = fBattery_Usage_Percent(thisACLineStatus)
-        
-        mBatteryDetails = mBatteryDetails & vbCrLf & thisACLineStatus
-        batteryTotalTimeLeft = fBattery_Total_Left
         SDeg = (batteryPercent * 3) + 30
 
+        mBatteryDetails = mBatteryDetails & vbCrLf & thisACLineStatus
+        
     
     On Error GoTo 0
     Exit Sub
@@ -773,6 +774,7 @@ Private Function fBatteryString() As String
     Dim colItems As Object
     Dim objItem As Object
     Dim result As String: result = vbNullString
+    Dim estimatedTime As String: estimatedTime = vbNullString
     
     On Error GoTo getGblBatteryArray_Error
     
@@ -789,7 +791,13 @@ Private Function fBatteryString() As String
         result = result + "Voltage: " & objItem.DesignVoltage & " Millivolts " & vbCrLf 'millivolts
         If objItem.BatteryStatus <> 2 Then
             mOnACPower = False
-            result = result + "Estimated Run Time Remaining: " & objItem.EstimatedRunTime & " mins. " & vbCrLf
+            
+            If batteryTotalTimeLeft = 0 Then
+                estimatedTime = "(Calculating)"
+            Else
+                estimatedTime = objItem.EstimatedRunTime
+            End If
+            result = result + "Estimated Run Time Remaining: " & estimatedTime & " mins. " & vbCrLf
         End If
     Next
         
