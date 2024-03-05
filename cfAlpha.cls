@@ -455,7 +455,8 @@ Private Sub tickbutton_mouseDown(ByRef Sender As Object)
     End If
     
     sPutINISetting "Software\PzBatteryGauge", "pointerAnimate", PzGPointerAnimate, PzGSettingsFile
-    
+    panzerPrefs.cmbTickSwitchPref.ListIndex = Val(PzGPointerAnimate)
+   
    On Error GoTo 0
    Exit Sub
 
