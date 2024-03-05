@@ -9,6 +9,9 @@ TODO
 
 ' smooth pointer - flick/smooth
 
+' new msgbox - no battery
+
+' startup - reboot - not present
 
 ' add second monitor - wip find cable!
 

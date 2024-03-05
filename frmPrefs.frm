@@ -14,6 +14,158 @@ Begin VB.Form panzerPrefs
    ScaleWidth      =   8880
    StartUpPosition =   3  'Windows Default
    Visible         =   0   'False
+   Begin VB.Frame fraGeneral 
+      Caption         =   "General"
+      ForeColor       =   &H80000008&
+      Height          =   5130
+      Left            =   75
+      TabIndex        =   50
+      Top             =   1200
+      Visible         =   0   'False
+      Width           =   7995
+      Begin VB.Frame fraGeneralInner 
+         BorderStyle     =   0  'None
+         Height          =   4080
+         Left            =   465
+         TabIndex        =   51
+         Top             =   300
+         Width           =   6750
+         Begin VB.CheckBox chkGaugeFunctions 
+            Caption         =   "Pointer operation toggle *"
+            Height          =   225
+            Left            =   1995
+            TabIndex        =   52
+            ToolTipText     =   "When checked this box enables the pointer. That's it!"
+            Top             =   180
+            Width           =   3405
+         End
+         Begin VB.ComboBox cmbTickSwitchPref 
+            Height          =   315
+            ItemData        =   "frmPrefs.frx":10CA
+            Left            =   2010
+            List            =   "frmPrefs.frx":10CC
+            Style           =   2  'Dropdown List
+            TabIndex        =   145
+            Top             =   975
+            Width           =   3720
+         End
+         Begin VB.CheckBox chkGenStartup 
+            Caption         =   "Run the Battery Widget at Windows Startup "
+            Height          =   465
+            Left            =   1995
+            TabIndex        =   93
+            ToolTipText     =   "Check this box to enable the automatic start of the program when Windows is started."
+            Top             =   3390
+            Width           =   4020
+         End
+         Begin vb6projectCCRSlider.Slider sliSamplingInterval 
+            Height          =   390
+            Left            =   1890
+            TabIndex        =   155
+            ToolTipText     =   "Setting the sampling interval affects the frequency of the pointer updates."
+            Top             =   2025
+            Width           =   3870
+            _ExtentX        =   6826
+            _ExtentY        =   688
+            Min             =   1
+            Max             =   30
+            Value           =   20
+            SelStart        =   20
+         End
+         Begin VB.Label lblWindowLevel 
+            Caption         =   "Adjust to determine gauge sampling frequency (seconds). *"
+            Height          =   600
+            Index           =   14
+            Left            =   2025
+            TabIndex        =   160
+            Top             =   2805
+            Width           =   3810
+         End
+         Begin VB.Label lblWindowLevel 
+            Caption         =   "Sampling Interval :"
+            Height          =   315
+            Index           =   13
+            Left            =   495
+            TabIndex        =   159
+            Top             =   2085
+            Width           =   1410
+         End
+         Begin VB.Label lblWindowLevel 
+            Caption         =   "15"
+            Height          =   315
+            Index           =   12
+            Left            =   3615
+            TabIndex        =   158
+            Top             =   2490
+            Width           =   840
+         End
+         Begin VB.Label lblWindowLevel 
+            Caption         =   "30"
+            Height          =   315
+            Index           =   11
+            Left            =   5385
+            TabIndex        =   157
+            Top             =   2490
+            Width           =   405
+         End
+         Begin VB.Label lblWindowLevel 
+            Caption         =   "1"
+            Height          =   315
+            Index           =   10
+            Left            =   2070
+            TabIndex        =   156
+            Top             =   2490
+            Width           =   345
+         End
+         Begin VB.Label lblGeneral 
+            Caption         =   "The pointer can be set to smooth or flick, the smooth movement uses more CPU."
+            Height          =   660
+            Index           =   9
+            Left            =   2025
+            TabIndex        =   147
+            Top             =   1410
+            Width           =   3810
+         End
+         Begin VB.Label lblGeneral 
+            Caption         =   "Smooth Movement :"
+            Height          =   480
+            Index           =   3
+            Left            =   375
+            TabIndex        =   146
+            Top             =   1035
+            Width           =   1605
+         End
+         Begin VB.Label lblGeneral 
+            Caption         =   "Gauge Functions :"
+            Height          =   315
+            Index           =   6
+            Left            =   510
+            TabIndex        =   95
+            Top             =   165
+            Width           =   1320
+         End
+         Begin VB.Label lblGeneral 
+            Caption         =   "Auto Start :"
+            Height          =   375
+            Index           =   11
+            Left            =   960
+            TabIndex        =   94
+            Tag             =   "lblRefreshInterval"
+            Top             =   3510
+            Width           =   1740
+         End
+         Begin VB.Label lblGeneral 
+            Caption         =   "When checked this box enables the pointer. *"
+            Height          =   660
+            Index           =   2
+            Left            =   2025
+            TabIndex        =   53
+            Tag             =   "lblEnableSoundsDesc"
+            Top             =   540
+            Width           =   3615
+         End
+      End
+   End
    Begin VB.Frame fraAbout 
       Caption         =   "About"
       Height          =   8580
@@ -39,7 +191,7 @@ Begin VB.Form panzerPrefs
          MultiLine       =   -1  'True
          ScrollBars      =   2  'Vertical
          TabIndex        =   114
-         Text            =   "frmPrefs.frx":10CA
+         Text            =   "frmPrefs.frx":10CE
          Top             =   2205
          Width           =   8010
       End
@@ -334,158 +486,6 @@ Begin VB.Form panzerPrefs
          TabIndex        =   106
          Top             =   510
          Width           =   1245
-      End
-   End
-   Begin VB.Frame fraGeneral 
-      Caption         =   "General"
-      ForeColor       =   &H80000008&
-      Height          =   5130
-      Left            =   75
-      TabIndex        =   50
-      Top             =   1200
-      Visible         =   0   'False
-      Width           =   7995
-      Begin VB.Frame fraGeneralInner 
-         BorderStyle     =   0  'None
-         Height          =   4080
-         Left            =   465
-         TabIndex        =   51
-         Top             =   300
-         Width           =   6750
-         Begin VB.CheckBox chkGaugeFunctions 
-            Caption         =   "Pointer operation toggle *"
-            Height          =   225
-            Left            =   1995
-            TabIndex        =   52
-            ToolTipText     =   "When checked this box enables the pointer. That's it!"
-            Top             =   180
-            Width           =   3405
-         End
-         Begin VB.ComboBox cmbTickSwitchPref 
-            Height          =   315
-            ItemData        =   "frmPrefs.frx":2081
-            Left            =   2010
-            List            =   "frmPrefs.frx":2083
-            Style           =   2  'Dropdown List
-            TabIndex        =   145
-            Top             =   975
-            Width           =   3720
-         End
-         Begin VB.CheckBox chkGenStartup 
-            Caption         =   "Run the Battery Widget at Windows Startup "
-            Height          =   465
-            Left            =   1995
-            TabIndex        =   93
-            ToolTipText     =   "Check this box to enable the automatic start of the program when Windows is started."
-            Top             =   3390
-            Width           =   4020
-         End
-         Begin vb6projectCCRSlider.Slider sliSamplingInterval 
-            Height          =   390
-            Left            =   1890
-            TabIndex        =   155
-            ToolTipText     =   "Setting the sampling interval affects the frequency of the pointer updates."
-            Top             =   2025
-            Width           =   3870
-            _ExtentX        =   6826
-            _ExtentY        =   688
-            Min             =   1
-            Max             =   30
-            Value           =   20
-            SelStart        =   20
-         End
-         Begin VB.Label lblWindowLevel 
-            Caption         =   "Adjust to determine gauge sampling frequency (seconds). *"
-            Height          =   600
-            Index           =   14
-            Left            =   2025
-            TabIndex        =   160
-            Top             =   2805
-            Width           =   3810
-         End
-         Begin VB.Label lblWindowLevel 
-            Caption         =   "Sampling Interval :"
-            Height          =   315
-            Index           =   13
-            Left            =   495
-            TabIndex        =   159
-            Top             =   2085
-            Width           =   1410
-         End
-         Begin VB.Label lblWindowLevel 
-            Caption         =   "15"
-            Height          =   315
-            Index           =   12
-            Left            =   3615
-            TabIndex        =   158
-            Top             =   2490
-            Width           =   840
-         End
-         Begin VB.Label lblWindowLevel 
-            Caption         =   "30"
-            Height          =   315
-            Index           =   11
-            Left            =   5385
-            TabIndex        =   157
-            Top             =   2490
-            Width           =   405
-         End
-         Begin VB.Label lblWindowLevel 
-            Caption         =   "1"
-            Height          =   315
-            Index           =   10
-            Left            =   2070
-            TabIndex        =   156
-            Top             =   2490
-            Width           =   345
-         End
-         Begin VB.Label lblGeneral 
-            Caption         =   "The pointer can be set to smooth or flick, the smooth movement uses more CPU."
-            Height          =   660
-            Index           =   9
-            Left            =   2025
-            TabIndex        =   147
-            Top             =   1410
-            Width           =   3810
-         End
-         Begin VB.Label lblGeneral 
-            Caption         =   "Smooth Movement :"
-            Height          =   480
-            Index           =   3
-            Left            =   375
-            TabIndex        =   146
-            Top             =   1035
-            Width           =   1605
-         End
-         Begin VB.Label lblGeneral 
-            Caption         =   "Gauge Functions :"
-            Height          =   315
-            Index           =   6
-            Left            =   510
-            TabIndex        =   95
-            Top             =   165
-            Width           =   1320
-         End
-         Begin VB.Label lblGeneral 
-            Caption         =   "Auto Start :"
-            Height          =   375
-            Index           =   11
-            Left            =   960
-            TabIndex        =   94
-            Tag             =   "lblRefreshInterval"
-            Top             =   3510
-            Width           =   1740
-         End
-         Begin VB.Label lblGeneral 
-            Caption         =   "When checked this box enables the pointer. *"
-            Height          =   660
-            Index           =   2
-            Left            =   2025
-            TabIndex        =   53
-            Tag             =   "lblEnableSoundsDesc"
-            Top             =   540
-            Width           =   3615
-         End
       End
    End
    Begin VB.Frame fraConfig 
@@ -2833,7 +2833,7 @@ Private Sub cmbDebug_Click()
 
     btnSave.Enabled = True ' enable the save button
     If cmbDebug.ListIndex = 0 Then
-        txtDefaultEditor.Text = "eg. E:\vb6\Panzer Earth gauge VB6\Panzer Earth Gauge.vbp"
+        txtDefaultEditor.Text = "eg. E:\vb6\Panzer-Battery-Gauge-VB6\Panzer Battery Gauge.vbp"
         txtDefaultEditor.Enabled = False
         lblDebug(7).Enabled = False
         btnDefaultEditor.Enabled = False
@@ -3199,7 +3199,7 @@ Private Sub btnSave_Click()
 '    PzGMainGaugeTimeZone = cmbMainGaugeTimeZone.ListIndex
 '    PzGMainDaylightSaving = cmbMainDaylightSaving.ListIndex
     
-    PzGSmoothSecondHand = cmbTickSwitchPref.ListIndex
+    PzGPointerAnimate = cmbTickSwitchPref.ListIndex
     PzGSamplingInterval = LTrim$(Str$(sliSamplingInterval.Value))
     
     'PzGSecondaryGaugeTimeZone = cmbSecondaryGaugeTimeZone.List(cmbSecondaryGaugeTimeZone.ListIndex)
@@ -3275,7 +3275,7 @@ Private Sub btnSave_Click()
         sPutINISetting "Software\PzBatteryGauge", "scrollWheelDirection", PzGScrollWheelDirection, PzGSettingsFile
                 
         sPutINISetting "Software\PzBatteryGauge", "gaugeFunctions", PzGGaugeFunctions, PzGSettingsFile
-        sPutINISetting "Software\PzBatteryGauge", "smoothSecondHand", PzGSmoothSecondHand, PzGSettingsFile
+        sPutINISetting "Software\PzBatteryGauge", "pointerAnimate", PzGPointerAnimate, PzGSettingsFile
         sPutINISetting "Software\PzBatteryGauge", "samplingInterval", PzGSamplingInterval, PzGSettingsFile
         
         
@@ -3523,7 +3523,7 @@ Private Sub adjustPrefsControls()
         
     'txtBias.Text = tzDelta
 
-    cmbTickSwitchPref.ListIndex = Val(PzGSmoothSecondHand)
+    cmbTickSwitchPref.ListIndex = Val(PzGPointerAnimate)
     
     sliSamplingInterval = Val(PzGSamplingInterval)
     
@@ -3962,7 +3962,7 @@ Private Sub fraConfigInner_MouseDown(Button As Integer, Shift As Integer, x As S
     End If
 End Sub
 Private Sub fraConfigInner_MouseMove(Button As Integer, Shift As Integer, x As Single, Y As Single)
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraConfigInner.hwnd, "The configuration panel is the location for optional configuration items. These items change how Pz Earth operates, configure them to suit your needs and your mode of operation.", _
+    If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraConfigInner.hwnd, "The configuration panel is the location for optional configuration items. These items change how Pz gauge operates, configure them to suit your needs and your mode of operation.", _
                   TTIconInfo, "Help on Configuration", , , , True
 
 End Sub
@@ -3972,7 +3972,7 @@ Private Sub fraConfig_MouseDown(Button As Integer, Shift As Integer, x As Single
     End If
 End Sub
 Private Sub fraConfig_MouseMove(Button As Integer, Shift As Integer, x As Single, Y As Single)
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraConfig.hwnd, "The configuration panel is the location for optional configuration items. These items change how Pz Earth operates, configure them to suit your needs and your mode of operation.", _
+    If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraConfig.hwnd, "The configuration panel is the location for optional configuration items. These items change how Pz gauge operates, configure them to suit your needs and your mode of operation.", _
                   TTIconInfo, "Help on Configuration", , , , True
 
 End Sub
@@ -4495,7 +4495,7 @@ Public Sub setPrefsTooltips()
         imgFontsClicked.ToolTipText = "Opens the Fonts tab"
         imgGeneral.ToolTipText = "Opens the general tab"
         imgGeneralClicked.ToolTipText = "Opens the general tab"
-        lblPosition(6).ToolTipText = "Tablets only. Don't fiddle with this unless you really know what you are doing. Here you can choose whether this Pz Earth widget is hidden by default in either landscape or portrait mode or not at all. This option allows you to have certain widgets that do not obscure the screen in either landscape or portrait. If you accidentally set it so you can't find your widget on screen then change the setting here to NONE."
+        lblPosition(6).ToolTipText = "Tablets only. Don't fiddle with this unless you really know what you are doing. Here you can choose whether this Pz gauge widget is hidden by default in either landscape or portrait mode or not at all. This option allows you to have certain widgets that do not obscure the screen in either landscape or portrait. If you accidentally set it so you can't find your widget on screen then change the setting here to NONE."
         chkGenStartup.ToolTipText = "Check this box to enable the automatic start of the program when Windows is started."
         chkGaugeFunctions.ToolTipText = "When checked this box enables the pointer. Any adjustment takes place instantly. "
 '        sliAnimationInterval.ToolTipText = "Adjust to make the animation smooth or choppy. Any adjustment in the interval takes place instantly. Lower values are smoother but the smoother it runs the more Battery it uses."
