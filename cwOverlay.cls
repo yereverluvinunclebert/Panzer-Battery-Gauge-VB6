@@ -87,7 +87,7 @@ Private Sub Class_Initialize()
         W.ImplementsHitTest = True 'when at False, no HitTest-Event would be triggered
                     
     Set tmrSampler = Nothing
-    Set tmrSampler = New_c.Timer(1000, mTicking)
+    Set tmrSampler = New_c.Timer(100, mTicking) ' first interval is 1/10th of a second, don't change it, triggers an immediate run. Correct sampling interval read later
     
     animationDivisions = 12
     animationInterval = 40
@@ -176,7 +176,6 @@ Public Property Let Ticking(ByVal newValue As Boolean)
     If mTicking <> newValue Then mTicking = newValue Else Exit Property
     
     If mTicking Then
-
         tmrSampler.Enabled = True
     Else
         tmrSampler.Enabled = False
@@ -261,6 +260,8 @@ Public Property Let samplingInterval(ByVal newValue As String)
 
     If mSamplingInterval <> newValue Then mSamplingInterval = newValue Else Exit Property
         
+    If tmrSampler.Interval = 100 Then Call tmrSampler_Timer ' allows first early run
+    
     tmrSampler.Interval = Val(mSamplingInterval) * 1000
     If mPointerAnimate = True Then
         If tmrSampler.Interval = 1000 Then tmrSampler.Interval = 1200 ' take into account the animator
