@@ -797,7 +797,7 @@ Private Function fBattery_Usage_Percent(ByRef thisACLineStatus As String) As Int
     
     If BatteryStatus.ACLineStatus = 1 Then
         mOnACPower = True
-        thisACLineStatus = "Mains AC Input Switched ON."
+        thisACLineStatus = "Mains AC Input Switched ON and charging."
     End If
     
     If BatteryStatus.BatteryLifePercent <> 255 Then ' 255 = no battery, desktop system
