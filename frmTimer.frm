@@ -112,8 +112,8 @@ Private Sub revealWidgetTimer_Timer()
 
         fAlpha.gaugeForm.Visible = True
         revealWidgetTimer.Enabled = False
-        PzGWidgetHidden = "0"
-        sPutINISetting "Software\PzBatteryGauge", "widgetHidden", PzGWidgetHidden, PzGSettingsFile
+        gblWidgetHidden = "0"
+        sPutINISetting "Software\PzBatteryGauge", "widgetHidden", gblWidgetHidden, gblSettingsFile
     End If
 
     On Error GoTo 0
@@ -179,12 +179,12 @@ Private Sub settingsTimer_Timer()
     
     On Error GoTo settingsTimer_Timer_Error
 
-    PzGUnhide = fGetINISetting("Software\PzBatteryGauge", "unhide", PzGSettingsFile)
+    gblUnhide = fGetINISetting("Software\PzBatteryGauge", "unhide", gblSettingsFile)
 
-    If PzGUnhide = "true" Then
+    If gblUnhide = "true" Then
         'overlayWidget.Hidden = False
         fAlpha.gaugeForm.Visible = True
-        sPutINISetting "Software\PzBatteryGauge", "unhide", vbNullString, PzGSettingsFile
+        sPutINISetting "Software\PzBatteryGauge", "unhide", vbNullString, gblSettingsFile
     End If
 
     On Error GoTo 0
