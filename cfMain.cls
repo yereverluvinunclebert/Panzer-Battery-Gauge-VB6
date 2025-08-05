@@ -39,21 +39,16 @@ Attribute btnDecline.VB_VarHelpID = -1
 Private WithEvents textBox As cwTextBox
 Attribute textBox.VB_VarHelpID = -1
 Private lblDeclineOrNot As cwLabel
-Attribute lblDeclineOrNot.VB_VarHelpID = -1
-
  
 
-
-
-
 '---------------------------------------------------------------------------------------
-' Procedure : initAndShowAboutForm
+' Procedure : initAndCreateAboutForm
 ' Author    :
 ' Date      : 27/04/2023
-' Purpose   :
+' Purpose   : Initialise and create the about form only, add the about widget based on the about class, to the form
 '---------------------------------------------------------------------------------------
 '
-Public Sub initAndShowAboutForm(ByVal x As Long, ByVal Y As Long, Optional ByVal dx As Long, Optional ByVal dy As Long, Optional ByVal Caption As String)
+Public Sub initAndCreateAboutForm(ByVal x As Long, ByVal y As Long, Optional ByVal dx As Long, Optional ByVal dy As Long, Optional ByVal Caption As String)
     
     Dim aboutFormWidth As Long: aboutFormWidth = 0
     Dim aboutFormHeight As Long: aboutFormHeight = 0
@@ -63,24 +58,24 @@ Public Sub initAndShowAboutForm(ByVal x As Long, ByVal Y As Long, Optional ByVal
     
     Const WFFStyleTool As Integer = 7 ' additional styles above the normal five  WFFStyleTool = 7 makes the taskbar button go away
     
-    On Error GoTo initAndShowAboutForm_Error
+    On Error GoTo initAndCreateAboutForm_Error
     
     If gblDpiAwareness = "0" Then
         aboutFormWidth = 900
         aboutFormHeight = 850
-        If aboutFormWidth > screenWidthPixels Then aboutFormWidth = screenWidthPixels
-        If aboutFormHeight > screenHeightPixels Then aboutFormHeight = screenHeightPixels
+        If aboutFormWidth > gblVirtualScreenWidthPixels Then aboutFormWidth = gblVirtualScreenWidthPixels
+        If aboutFormHeight > gblVirtualScreenHeightPixels Then aboutFormHeight = gblVirtualScreenHeightPixels
     Else
         aboutFormWidth = 1800
         aboutFormHeight = 1600
-        If aboutFormWidth > screenWidthPixels Then
-            aboutFormWidth = screenWidthPixels
+        If aboutFormWidth > gblVirtualScreenWidthPixels Then
+            aboutFormWidth = gblVirtualScreenWidthPixels
             aboutWidgetZoomValue = 1
         Else
             aboutWidgetZoomValue = 1.6
         End If
-        If aboutFormHeight > screenHeightPixels Then
-            aboutFormHeight = screenHeightPixels
+        If aboutFormHeight > gblVirtualScreenHeightPixels Then
+            aboutFormHeight = gblVirtualScreenHeightPixels
             aboutWidgetZoomValue = 1
         Else
             aboutWidgetZoomValue = 1.6
@@ -107,90 +102,91 @@ Public Sub initAndShowAboutForm(ByVal x As Long, ByVal Y As Long, Optional ByVal
    On Error GoTo 0
    Exit Sub
 
-initAndShowAboutForm_Error:
+initAndCreateAboutForm_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure initAndShowAboutForm of Class Module cfMain"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure initAndCreateAboutForm of Class Module cfMain"
     
 End Sub
 
 '---------------------------------------------------------------------------------------
-' Procedure : initAndShowHelpForm
+' Procedure : initAndCreateHelpForm
 ' Author    :
 ' Date      : 27/04/2023
-' Purpose   :
+' Purpose   : Initialise and create the Help form only, add the Help widget based on the Help class, to the form
 '---------------------------------------------------------------------------------------
 '
-Public Sub initAndShowHelpForm(ByVal x As Long, ByVal Y As Long, Optional ByVal dx As Long, Optional ByVal dy As Long, Optional ByVal Caption As String)
+Public Sub initAndCreateHelpForm(ByVal x As Long, ByVal y As Long, Optional ByVal dx As Long, Optional ByVal dy As Long, Optional ByVal Caption As String)
     
     Dim helpFormWidth As Long: helpFormWidth = 0
     Dim helpFormHeight As Long: helpFormHeight = 0
     Dim helpWidgetWidth As Long: helpWidgetWidth = 0
     Dim helpWidgetHeight As Long: helpWidgetHeight = 0
-    
     Dim helpWidgetZoomValue As Double: helpWidgetZoomValue = 1
     
     Const WFFStyleTool As Integer = 7 ' additional styles above the normal five  WFFStyleTool = 7 makes the taskbar button go away
     
-    On Error GoTo initAndShowHelpForm_Error
+    On Error GoTo initAndCreateHelpForm_Error
     
     If gblDpiAwareness = "0" Then
         helpFormWidth = 1000
         helpFormHeight = 800
-        If helpFormWidth > screenWidthPixels Then helpFormWidth = screenWidthPixels
-        If helpFormHeight > screenHeightPixels Then helpFormHeight = screenHeightPixels
+        If helpFormWidth > gblVirtualScreenWidthPixels Then helpFormWidth = gblVirtualScreenWidthPixels
+        If helpFormHeight > gblVirtualScreenHeightPixels Then helpFormHeight = gblVirtualScreenHeightPixels
         helpWidgetZoomValue = 0.8
     Else
         helpFormWidth = 1600
         helpFormHeight = 1300
-        If helpFormWidth > screenWidthPixels Then
-            helpFormWidth = screenWidthPixels
+        If helpFormWidth > gblVirtualScreenWidthPixels Then
+            helpFormWidth = gblVirtualScreenWidthPixels
             helpWidgetZoomValue = 1
         Else
             helpWidgetZoomValue = 1.4
         End If
-        
-        If helpFormHeight > screenHeightPixels Then
-            helpFormHeight = screenHeightPixels
+        If helpFormHeight > gblVirtualScreenHeightPixels Then
+            helpFormHeight = gblVirtualScreenHeightPixels
             helpWidgetZoomValue = 1
         Else
             helpWidgetZoomValue = 1.4
         End If
-        
     End If
     helpWidgetWidth = helpFormWidth - 100
     helpWidgetHeight = helpFormHeight - 100
     
-    ' create an invisible form using a Cairo Widget Form with a predefined caption and sizing
-    Set helpForm = Cairo.WidgetForms.Create(WFFStyleTool, Caption, , helpFormWidth, helpFormHeight)
+    ' create an invisible form using a Cairo Widget Form with the predefined caption and sizing
+    Set helpForm = Cairo.WidgetForms.Create(WFFStyleTool, "Help the " & Caption & " Widget", True, helpFormWidth, helpFormHeight)
     
     ' make the help form transparent
     helpForm.WidgetRoot.BackColor = -1
-         
-    ' create a new help widget image with a name, position and size
-    Set helpWidget = helpForm.Widgets.Add(New cwHelp, "help", 0, 0, helpWidgetWidth, helpWidgetHeight)
-       
-     If gblDpiAwareness = "0" Then
+    
+    ' create a new help widget with a name, position and size, first step of that is to run Class_Initialize
+    Set helpWidget = helpForm.Widgets.Add(New cwHelp, "help", 1, 1, helpWidgetWidth, helpWidgetHeight)
+    
+    If gblDpiAwareness = "0" Then
         helpWidget.Zoom = helpWidgetZoomValue
     Else
         helpWidget.Zoom = helpWidgetZoomValue
     End If
-
+    
    On Error GoTo 0
    Exit Sub
 
-initAndShowHelpForm_Error:
+initAndCreateHelpForm_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure initAndShowHelpForm of Class Module cfMain"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure initAndCreateHelpForm of Class Module cfMain"
     
 End Sub
+
+
+
 '---------------------------------------------------------------------------------------
-' Procedure : initAndShowLicenceForm
+' Procedure : initAndCreateLicenceForm
 ' Author    :
 ' Date      : 27/04/2023
-' Purpose   :
+' Purpose   : Initialise and create the licence form only, add the licence widget based on the licence class, to the form
+'             as well as two RC cwButton widgets for the accept and decline buttons
 '---------------------------------------------------------------------------------------
 '
-Public Sub initAndShowLicenceForm(ByVal x As Long, ByVal Y As Long, Optional ByVal dx As Long, Optional ByVal dy As Long, Optional ByVal Caption As String)
+Public Sub initAndCreateLicenceForm(ByVal x As Long, ByVal y As Long, Optional ByVal dx As Long, Optional ByVal dy As Long, Optional ByVal Caption As String)
     
     Dim licenceFormWidth As Long: licenceFormWidth = 0
     Dim licenceFormHeight As Long: licenceFormHeight = 0
@@ -201,26 +197,26 @@ Public Sub initAndShowLicenceForm(ByVal x As Long, ByVal Y As Long, Optional ByV
     
     Const WFFStyleTool As Integer = 7 ' additional styles above the normal five  WFFStyleTool = 7 makes the taskbar button go away
     
-    On Error GoTo initAndShowLicenceForm_Error
+    On Error GoTo initAndCreateLicenceForm_Error
     
     If gblDpiAwareness = "0" Then
         licenceFormWidth = 650
         licenceFormHeight = 550
-        If licenceFormWidth > screenWidthPixels Then licenceFormWidth = screenWidthPixels
-        If licenceFormHeight > screenHeightPixels Then licenceFormHeight = screenHeightPixels
+        If licenceFormWidth > gblVirtualScreenWidthPixels Then licenceFormWidth = gblVirtualScreenWidthPixels
+        If licenceFormHeight > gblVirtualScreenHeightPixels Then licenceFormHeight = gblVirtualScreenHeightPixels
         licenceWidgetZoomValue = 0.8
     Else
         licenceFormWidth = 750
         licenceFormHeight = 650
-        If licenceFormWidth > screenWidthPixels Then
-            licenceFormWidth = screenWidthPixels
+        If licenceFormWidth > gblVirtualScreenWidthPixels Then
+            licenceFormWidth = gblVirtualScreenWidthPixels
             licenceWidgetZoomValue = 0.8
         Else
             licenceWidgetZoomValue = 1.5
         End If
         
-        If licenceFormHeight > screenHeightPixels Then
-            licenceFormHeight = screenHeightPixels
+        If licenceFormHeight > gblVirtualScreenHeightPixels Then
+            licenceFormHeight = gblVirtualScreenHeightPixels
             licenceWidgetZoomValue = 0.8
         Else
             licenceWidgetZoomValue = 1.5
@@ -245,45 +241,56 @@ Public Sub initAndShowLicenceForm(ByVal x As Long, ByVal Y As Long, Optional ByV
         licenceWidget.Zoom = licenceWidgetZoomValue
     End If
 
+    ' When running in the IDE the RC6 DLLs are required to be registered. If for some reason they become unregistered then
+    ' the following 'set' commands will generate an error, to handle this we have a temporary error trap for the IDE only.
+    
+    If InIDE Then On Error GoTo RC6NotRegistered_Error
+
     ' add two RC predefined button controls to the licence form
     If gblDpiAwareness = "1" Then
         Set btnDecline = licenceForm.Widgets.Add(New_W("cwButton"), "btnDecline", 352, 397, 70, 29)
         Set btnAccept = licenceForm.Widgets.Add(New_W("cwButton"), "btnAccept", 428, 397, 70, 29)
         Set textBox = licenceForm.Widgets.Add(New_W("cwTextBox"), "textBox", 50, 60, 440, 280)
         Set lblDeclineOrNot = licenceForm.Widgets.Add(New_W("cwLabel"), "lblDeclineOrNot", 50, 345, 440, 35)
-        textBox.Widget.FontSize = 11
-        btnDecline.Widget.FontSize = 10
-        btnAccept.Widget.FontSize = 10
-        lblDeclineOrNot.Widget.FontSize = 8
     Else
         Set btnDecline = licenceForm.Widgets.Add(New_W("cwButton"), "btnDecline", 189, 210, 40, 18)
         Set btnAccept = licenceForm.Widgets.Add(New_W("cwButton"), "btnAccept", 228, 210, 40, 18)
         Set textBox = licenceForm.Widgets.Add(New_W("cwTextBox"), "textBox", 25, 30, 240, 155)
         Set lblDeclineOrNot = licenceForm.Widgets.Add(New_W("cwLabel"), "lblDeclineOrNot", 25, 188, 240, 20)
-        textBox.Widget.FontSize = 8
-        btnDecline.Widget.FontSize = 7
-        btnAccept.Widget.FontSize = 7
-        lblDeclineOrNot.Widget.FontSize = 6
     End If
     
-    btnDecline.Caption = "Decline"
-    btnDecline.Widget.ForeColor = vbWhite
-    btnDecline.Widget.Alpha = 0.05
-    btnDecline.Widget.ToolTip = "Press this button to decline the terms of the GPL licence."
+    On Error GoTo initAndCreateLicenceForm_Error
     
-    btnAccept.Caption = "Accept"
-    btnAccept.Widget.ForeColor = vbWhite
-    btnAccept.Widget.Alpha = 0.05
-    btnAccept.Widget.ToolTip = "Press this button to accept the terms of the GPL licence."
+    If gblDpiAwareness = "1" Then
+        licenceForm.Widgets("TextBox").Widget.FontSize = 11
+        licenceForm.Widgets("btnDecline").Widget.FontSize = 10
+        licenceForm.Widgets("btnAccept").Widget.FontSize = 10
+        licenceForm.Widgets("lblDeclineOrNot").Widget.FontSize = 8
+    Else
+        licenceForm.Widgets("TextBox").Widget.FontSize = 8
+        licenceForm.Widgets("btnDecline").Widget.FontSize = 7
+        licenceForm.Widgets("btnAccept").Widget.FontSize = 7
+        licenceForm.Widgets("lblDeclineOrNot").Widget.FontSize = 6
+    End If
     
-    textBox.MultiLine = True
-    textBox.ScrollBars = vbVertical
-    textBox.Widget.BackColor = &H4000&
-    textBox.Widget.ForeColor = vbWhite
+    licenceForm.Widgets("btnDecline").Caption = "Decline"
+    licenceForm.Widgets("btnDecline").Widget.ForeColor = vbWhite
+    licenceForm.Widgets("btnDecline").Widget.Alpha = 0.05
+    licenceForm.Widgets("btnDecline").Widget.ToolTip = "Press this button to decline the terms of the GPL licence."
+        
+    licenceForm.Widgets("btnAccept").Caption = "Accept"
+    licenceForm.Widgets("btnAccept").Widget.ForeColor = vbWhite
+    licenceForm.Widgets("btnAccept").Widget.Alpha = 0.05
+    licenceForm.Widgets("btnAccept").Widget.ToolTip = "Press this button to accept the terms of the GPL licence."
     
-    Call LoadFileToTB(textBox, App.path & "\resources\txt\licence.txt", False)
+    licenceForm.Widgets("TextBox").MultiLine = True
+    licenceForm.Widgets("TextBox").ScrollBars = vbVertical
+    licenceForm.Widgets("TextBox").Widget.BackColor = &H4000&
+    licenceForm.Widgets("TextBox").Widget.ForeColor = vbWhite
+    
+    Call LoadFileToTB(textBox, App.Path & "\resources\txt\licence.txt", False)
 
-    textBox.Text = widgetName & vbCrLf & vbCrLf & _
+    licenceForm.Widgets("TextBox").Text = gblWidgetName & vbCrLf & vbCrLf & _
     "Copyright © 1992-2023 Dean Beedell" & vbCrLf & vbCrLf & _
     "This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public Licence as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version." & vbCrLf & vbCrLf & _
         "This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details." & vbCrLf & vbCrLf & _
@@ -291,28 +298,35 @@ Public Sub initAndShowLicenceForm(ByVal x As Long, ByVal Y As Long, Optional ByV
         "If you use this software in any way whatsoever then that implies acceptance of the licence. If you do not wish to comply with the licence terms then please remove the download, binary and source code from your systems immediately." & vbCrLf & vbCrLf & _
         "You may use any of my own imagery in your own creations but commercially only with my permission. In all other non-commercial cases I require a credit to the original artist using my name or one of my pseudonyms and a link to my site. With regard to the commercial use of incorporated images, permission and a licence would need to be obtained from the original owner and creator, ie. me."
 
-    lblDeclineOrNot.borderWidth = 0
-    lblDeclineOrNot.WordWrap = True
-    lblDeclineOrNot.Alignment = vbCenter
-    lblDeclineOrNot.Widget.BackColor = -1
-    lblDeclineOrNot.Widget.ForeColor = vbWhite
+    licenceForm.Widgets("lblDeclineOrNot").BorderWidth = 0
+    licenceForm.Widgets("lblDeclineOrNot").WordWrap = True
+    licenceForm.Widgets("lblDeclineOrNot").Alignment = vbCenter
+    licenceForm.Widgets("lblDeclineOrNot").Widget.BackColor = -1
+    licenceForm.Widgets("lblDeclineOrNot").Widget.ForeColor = vbWhite
     
-    lblDeclineOrNot.Caption = "If you do not agree with the terms set forth above, please click the " & _
+    licenceForm.Widgets("lblDeclineOrNot").Caption = "If you do not agree with the terms set forth above, please click the " & _
         "Decline button below and destroy this widget and its documentation"
         
    On Error GoTo 0
+
    Exit Sub
 
-initAndShowLicenceForm_Error:
+initAndCreateLicenceForm_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure initAndShowLicenceForm of Class Module cfMain"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure initAndCreateLicenceForm_Error of Class Module cfMain"
     
+    Exit Sub
+   
+RC6NotRegistered_Error:
+    
+    MsgBox "Error in procedure initAndCreateLicenceForm_Error of Class Module cfMain. RC6.DLL is NOT registered, use the registration script to register RC6.DLL."
+
 End Sub
 '---------------------------------------------------------------------------------------
 ' Procedure : btnAccept_Click
 ' Author    : beededea
 ' Date      : 20/09/2023
-' Purpose   :
+' Purpose   : Click event for this RC cwButton widget
 '---------------------------------------------------------------------------------------
 '
 Private Sub btnAccept_Click()
@@ -323,8 +337,9 @@ Private Sub btnAccept_Click()
     On Error GoTo btnAccept_Click_Error
     
     fileToPlay = "ting.wav"
-    If gblEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
-        PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+    
+    If gblEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
+        playSound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
     End If
 
     answer = msgBoxA("User accepted licence, thankyou.", vbOKOnly + vbExclamation, "Licence Acceptance", True, "btnAcceptClick")
@@ -350,7 +365,7 @@ End Sub
 ' Procedure : btnDecline_Click
 ' Author    : beededea
 ' Date      : 20/09/2023
-' Purpose   :
+' Purpose   : Click event for this RC cwButton widget
 '---------------------------------------------------------------------------------------
 '
 Private Sub btnDecline_Click()
@@ -378,35 +393,37 @@ End Sub
 
 
 
-'---------------------------------------------------------------------------------------
-' Procedure : licenceForm_MouseMove
-' Author    : beededea
-' Date      : 31/07/2023
-' Purpose   :
-'---------------------------------------------------------------------------------------
+''---------------------------------------------------------------------------------------
+'' Procedure : licenceForm_MouseMove
+'' Author    : beededea
+'' Date      : 31/07/2023
+'' Purpose   : MouseMove event for the whole form
+''---------------------------------------------------------------------------------------
+''
+'Private Sub licenceForm_MouseMove(ByRef Button As Integer, ByRef Shift As Integer, ByRef x As Single, ByRef y As Single)
+'  Static x0 As Single, y0 As Single: If Button = 0 Then x0 = x: y0 = y 'just store the offsets when no button is down
 '
-Private Sub licenceForm_MouseMove(ByRef Button As Integer, ByRef Shift As Integer, ByRef x As Single, ByRef Y As Single)
-  Static x0 As Single, y0 As Single: If Button = 0 Then x0 = x: y0 = Y 'just store the offsets when no button is down
-  
-   On Error GoTo licenceForm_MouseMove_Error
-    
-    If overlayWidget.Locked = True Then Exit Sub
-    If gblIgnoreMouse = "1" Then Exit Sub
+'   On Error GoTo licenceForm_MouseMove_Error
+'
+'    If overlayWidget.Locked = True Then Exit Sub
+'    If gblIgnoreMouse = "1" Then Exit Sub
+'
+''    If Button = vbLeftButton And Not licenceForm.ActiveWidget Is Nothing Then 'Form-Dragging (under certain conditions)
+''
+''      licenceFormX = (x - x0) * licenceForm.WidgetRoot.Zoom + licenceForm.Left
+''      licenceFormY = (y - y0) * licenceForm.WidgetRoot.Zoom + licenceForm.Top
+''      licenceForm.Move licenceFormX, licenceFormY
+''    End If
+'
+'
+'   On Error GoTo 0
+'   Exit Sub
+'
+'licenceForm_MouseMove_Error:
+'
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure licenceForm_MouseMove of Class Module cfGauge"
+'End Sub
 
-    If Button = vbLeftButton And Not licenceForm.ActiveWidget Is Nothing Then 'Form-Dragging (under certain conditions)
 
-      licenceFormX = (x - x0) * licenceForm.WidgetRoot.Zoom + licenceForm.Left
-      licenceFormY = (Y - y0) * licenceForm.WidgetRoot.Zoom + licenceForm.Top
-      licenceForm.Move licenceFormX, licenceFormY
-    End If
-
-
-   On Error GoTo 0
-   Exit Sub
-
-licenceForm_MouseMove_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure licenceForm_MouseMove of Class Module cfAlpha"
-End Sub
 
 
